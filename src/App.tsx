@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { PromptItem } from './types'
 import { getParams, type Params } from './lib/params'
 import { loadPrompts } from './lib/loadPrompts'
@@ -8,6 +8,7 @@ import Header from './components/Header'
 import GroupSection from './components/GroupSection'
 import PromptRow from './components/PromptRow'
 import PromptDialog from './components/PromptDialog'
+import Toast from './components/Toast'
 
 function App() {
   const result = getParams()
@@ -22,7 +23,9 @@ function Feeder({ params }: { params: Params }) {
   const [items, setItems] = useState<PromptItem[] | null>(null)
   const [error, setError] = useState('')
   const [shown, setShown] = useState<PromptItem | null>(null)
-  const { getStatus, setStatus, clear } = useProgress(
+  const [toast, setToast] = useState('')
+  const toastTimer = useRef<number | undefined>(undefined)
+  const { getStatus, currentId, markCopied, clear } = useProgress(
     makeStorageKey(params.prompt, params.project),
   )
 
@@ -40,11 +43,18 @@ function Feeder({ params }: { params: Params }) {
     }
   }, [params.prompt, params.project])
 
+  // 画面下にメッセージを2.5秒だけ表示する（続けて押したら時間を延長する）
+  function showToast(message: string) {
+    setToast(message)
+    window.clearTimeout(toastTimer.current)
+    toastTimer.current = window.setTimeout(() => setToast(''), 2500)
+  }
+
   if (error) return <Message text={error} />
   if (!items) return <Message text="読み込み中..." />
 
-  const doneCount = items.filter((item) => getStatus(item.id) === 'done').length
-  const nextId = items.find((item) => getStatus(item.id) !== 'done')?.id
+  const countCopied = (list: PromptItem[]) =>
+    list.filter((item) => getStatus(item.id) === 'copied').length
 
   function handleClear() {
     if (window.confirm('この演習の進捗をすべて消して、最初からにしますか？')) {
@@ -53,19 +63,18 @@ function Feeder({ params }: { params: Params }) {
   }
 
   function renderRow(item: PromptItem, index: number) {
-    const status = getStatus(item.id)
     return (
       <PromptRow
         key={item.id}
         no={index + 1}
         item={item}
-        status={status}
-        isNext={item.id === nextId}
+        status={getStatus(item.id)}
+        isCurrent={item.id === currentId}
         onCopied={() => {
-          if (status === 'todo') setStatus(item.id, 'copied')
+          markCopied(item.id)
+          showToast(`コピーしました (${item.title.split('：')[1]})`)
         }}
-        onDone={() => setStatus(item.id, 'done')}
-        onUndo={() => setStatus(item.id, 'copied')}
+        onCopyFailed={() => showToast('コピーできませんでした。「詳細」から選択してコピーしてください')}
         onShow={() => setShown(item)}
       />
     )
@@ -73,14 +82,13 @@ function Feeder({ params }: { params: Params }) {
 
   const group1 = items.filter((item) => item.group === 1)
   const group2 = items.filter((item) => item.group === 2)
-  const countDone = (list: PromptItem[]) =>
-    list.filter((item) => getStatus(item.id) === 'done').length
+  const hasCurrent = (list: PromptItem[]) => list.some((item) => item.id === currentId)
 
   return (
     <div className="min-h-dvh bg-white text-black">
       <Header
         project={params.project}
-        doneCount={doneCount}
+        copiedCount={countCopied(items)}
         total={items.length}
         onClear={handleClear}
       />
@@ -88,24 +96,27 @@ function Feeder({ params }: { params: Params }) {
       <main className="mx-auto max-w-4xl px-4 py-4">
         <GroupSection
           title="グループ1：Viteアプリを作る"
-          notice="ChatGPTで新しいチャットを開き、このプロンプトをコピーして貼り付け、送信してください。AI先生の指示に従って最後まで進めたら「完了にする」を押します。"
-          doneCount={countDone(group1)}
+          notice="ChatGPTで新しいチャットを開き、このプロンプトをコピーして貼り付け、送信してください。AI先生の指示に従って最後まで進めます。"
+          copiedCount={countCopied(group1)}
           total={group1.length}
+          hasCurrent={hasCurrent(group1)}
         >
           {group1.map(renderRow)}
         </GroupSection>
 
         <GroupSection
           title="グループ2：アプリを作る演習"
-          notice="グループ1が終わったら、ChatGPTで新しいチャットを開いてください。上から順に1つずつコピーして貼り付けます。AI先生に「次のステップを貼ってください」と言われたら、今の行を「完了にする」にして、次の行をコピーします。"
-          doneCount={countDone(group2)}
+          notice="グループ1が終わったら、ChatGPTで新しいチャットを開いてください。上から順に1つずつコピーして貼り付けます。AI先生に「次のステップを貼ってください」と言われたら、次の行をコピーします。"
+          copiedCount={countCopied(group2)}
           total={group2.length}
+          hasCurrent={hasCurrent(group2)}
         >
           {group2.map(renderRow)}
         </GroupSection>
       </main>
 
       <PromptDialog item={shown} onClose={() => setShown(null)} />
+      <Toast message={toast} />
     </div>
   )
 }

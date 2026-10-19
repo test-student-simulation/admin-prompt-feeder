@@ -3,14 +3,15 @@ import { useState, type ReactNode } from 'react'
 type Props = {
     title: string
     notice: string
-    doneCount: number
+    copiedCount: number
     total: number
+    hasCurrent: boolean
     children: ReactNode
 }
 
-function GroupSection({ title, notice, doneCount, total, children }: Props) {
-    // 最初の表示のときだけ決める：未完了が残っていれば開く、全部完了なら閉じる
-    const [open, setOpen] = useState(doneCount < total)
+function GroupSection({ title, notice, copiedCount, total, hasCurrent, children }: Props) {
+    // 最初の表示のときだけ決める：未着手が残っているか、作業中の行があれば開く
+    const [open, setOpen] = useState(copiedCount < total || hasCurrent)
 
     return (
         <section className="mb-6">
@@ -22,7 +23,7 @@ function GroupSection({ title, notice, doneCount, total, children }: Props) {
                 <span className="w-4">{open ? '▼' : '▶'}</span>
                 <span>{title}</span>
                 <span className="ml-auto text-sm font-normal">
-                    完了 {doneCount} / {total}
+                    コピー済 {copiedCount} / {total}
                 </span>
             </button>
 
