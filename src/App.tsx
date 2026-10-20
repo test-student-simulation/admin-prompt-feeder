@@ -62,17 +62,18 @@ function Feeder({ params }: { params: Params }) {
     }
   }
 
-  function renderRow(item: PromptItem, index: number) {
-    return (
+  // start：そのグループの最初の行の番号（グループ2は「はじめに」を0番にする）
+  function renderRow(start: number) {
+    return (item: PromptItem, index: number) => (
       <PromptRow
         key={item.id}
-        no={index + 1}
+        no={start + index}
         item={item}
         status={getStatus(item.id)}
         isCurrent={item.id === currentId}
         onCopied={() => {
           markCopied(item.id)
-          showToast(`コピーしました (${item.title.split('：')[1]})`)
+          showToast(`コピーしました (${item.title.split('：')[1] ?? item.title})`)
         }}
         onCopyFailed={() => showToast('コピーできませんでした。「詳細」から選択してコピーしてください')}
         onShow={() => setShown(item)}
@@ -101,7 +102,7 @@ function Feeder({ params }: { params: Params }) {
           total={group1.length}
           hasCurrent={hasCurrent(group1)}
         >
-          {group1.map(renderRow)}
+          {group1.map(renderRow(1))}
         </GroupSection>
 
         <GroupSection
@@ -111,7 +112,7 @@ function Feeder({ params }: { params: Params }) {
           total={group2.length}
           hasCurrent={hasCurrent(group2)}
         >
-          {group2.map(renderRow)}
+          {group2.map(renderRow(0))}
         </GroupSection>
       </main>
 
