@@ -9,8 +9,9 @@ function Header({ project, copiedCount, total, onClear }: Props) {
     return (
         <header className="sticky top-0 z-10 border-b border-gray-200 bg-white/95 backdrop-blur">
             <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-4 py-3">
-                <div className="min-w-0">
-                    <h1 className="truncate text-lg font-bold">AI先生プロンプト：{project}</h1>
+                <div className="min-w-0 flex flex-row items-center gap-2">
+                    <h1 className="truncate text-lg font-bold">AI先生を作るプロンプト集</h1>
+                    <h3 className="truncate text-sm text-gray-600">{project}</h3>
                 </div>
                 <div className="flex shrink-0 flex-row items-center gap-4">
                     <p className="text-sm text-gray-600">

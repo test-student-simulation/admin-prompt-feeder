@@ -242,6 +242,7 @@ npm create vite@latest .
 * Remove existing files and continue
 * React
 * TypeScript
+* Oxlint
 
 を選択します。
 
@@ -561,7 +562,7 @@ GitHub Pagesで公開されたURLをQRコードにします。
 ↓  
 **PCやスマートフォンから公開されたWebサイトを見る**
 
-この一連の流れを確認できたら演習終了です。
+この一連の流れを確認できたら演習終了です。授業の中で次のプロンプトが用意されている場合には、新しいチャットを作成してそこに次のプロンプトを入力して演習を続けるように指示をします。
 
 ---
 
