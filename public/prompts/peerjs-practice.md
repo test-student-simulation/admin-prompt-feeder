@@ -912,7 +912,7 @@ function VideoPanel({ stream }: { stream: MediaStream }) {
 
 【断片 6-6】
 ```tsx
-      <div className="grid grid-cols-6 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-2 items-start gap-4 md:grid-cols-3 lg:grid-cols-4">
         {videos.map((video) => (
           <VideoPanel
             key={video.stream.id}
@@ -1086,7 +1086,7 @@ function App() {
         </div>
       )}
 
-      <div className="grid grid-cols-6 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-2 items-start gap-4 md:grid-cols-3 lg:grid-cols-4">
         {videos.map((video) => (
           <VideoPanel
             key={video.stream.id}
@@ -1384,7 +1384,7 @@ function App() {
         </div>
       )}
 
-      <div className="grid grid-cols-6 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-2 items-start gap-4 md:grid-cols-3 lg:grid-cols-4">
         {videos.map((video) => (
           <VideoPanel
             key={video.stream.id}
@@ -1695,7 +1695,7 @@ function App() {
         </div>
       )}
 
-      <div className="grid grid-cols-6 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-2 items-start gap-4 md:grid-cols-3 lg:grid-cols-4">
         {videos.map((video) => (
           <VideoPanel
             key={video.stream.id}
@@ -2001,7 +2001,7 @@ function App() {
         </div>
       )}
 
-      <div className="grid grid-cols-6 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-2 items-start gap-4 md:grid-cols-3 lg:grid-cols-4">
         {videos.map((video) => (
           <VideoPanel
             key={video.stream.id}
@@ -2385,7 +2385,7 @@ function App() {
         </div>
       )}
 
-      <div className="grid grid-cols-6 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-2 items-start gap-4 md:grid-cols-3 lg:grid-cols-4">
         {videos.map((video) => (
           <VideoPanel
             key={video.stream.id}
