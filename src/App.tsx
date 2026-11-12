@@ -31,7 +31,7 @@ function Feeder({ params }: { params: Params }) {
 
   useEffect(() => {
     let active = true
-    loadPrompts(params.prompt, params.project)
+    loadPrompts(params.setup, params.prompt, params.project)
       .then((loaded) => {
         if (active) setItems(loaded)
       })
@@ -41,7 +41,7 @@ function Feeder({ params }: { params: Params }) {
     return () => {
       active = false
     }
-  }, [params.prompt, params.project])
+  }, [params.setup, params.prompt, params.project])
 
   // 画面下にメッセージを2.5秒だけ表示する（続けて押したら時間を延長する）
   function showToast(message: string) {
@@ -96,7 +96,7 @@ function Feeder({ params }: { params: Params }) {
 
       <main className="mx-auto max-w-4xl px-4 py-4">
         <GroupSection
-          title="グループ1：Viteアプリを作る"
+          title="グループ1：プロジェクトの準備"
           notice="ChatGPTで新しいチャットを開き、このプロンプトをコピーして貼り付け、送信してください。AI先生の指示に従って最後まで進めます。"
           copiedCount={countCopied(group1)}
           total={group1.length}
@@ -125,7 +125,7 @@ function Feeder({ params }: { params: Params }) {
 function Message({ text }: { text: string }) {
   return (
     <div className="flex min-h-dvh items-center justify-center bg-white p-4">
-      <p className="max-w-xl border border-black p-4">
+      <p className="max-w-2xl border border-black p-4">
         {text}
       </p>
     </div>
