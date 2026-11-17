@@ -207,9 +207,22 @@ npx create-next-app@latest .
 
 `Ok to proceed? (y)` などと表示された場合は、`y` を入力してEnterを押します。
 
-その後に表示される質問は、**すべて最初に選ばれているもの（デフォルト）のままEnterを押して進めます。** 「おすすめの設定（recommended defaults）を使いますか」という質問が出た場合も、最初に選ばれている「Yes」のままEnterを押します。
+続いて次の質問が表示されます。
 
-デフォルトでは、TypeScript・ESLint・Tailwind CSS・App Router が使われ、`src` フォルダは作られません。この後の演習は、この構成（`app` フォルダがいちばん上にある）を前提にしているので、デフォルト以外を選ばせてはいけません。
+```
+? Would you like to use the recommended Next.js defaults?
+❯ Yes, use recommended defaults
+  No, reuse previous settings
+  No, customize settings
+```
+
+**「Yes, use recommended defaults」を選んでEnterを押します**（最初から選ばれているので、そのままEnterでよい）。ほかの質問は出ません。
+
+「No, reuse previous settings」や「No, customize settings」を選んではいけません。選んでしまった場合は、`Ctrl + C` で止めてから、もう一度 `npx create-next-app@latest .` を実行します。
+
+「Yes, use recommended defaults」では、TypeScript・ESLint・Tailwind CSS・App Router が使われ、`src` フォルダは作られません。この後の演習は、この構成（`app` フォルダがいちばん上にある）を前提にしているので、ほかの選択肢を選ばせてはいけません。
+
+※ Next.jsの版によって、質問の文や選択肢が違う場合は、学生に画面を見せてもらい、最初から選ばれているもの（デフォルト）を選ぶよう案内してください。
 
 必要なパッケージのインストールも自動で行われるので、終わるまで待ちます（数分かかることがあります）。
 
