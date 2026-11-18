@@ -36,7 +36,8 @@
 
 ## 共通の確認手順
 
-**共通手順L（PCで確認）**：VS Codeのターミナルで `npm run dev` を実行（動いていれば不要）→ 表示された `http://localhost:3000` をPCのブラウザで開く（開いていれば再読み込み）。
+**共通手順L（PCで確認）**：VS Codeのターミナルで `npm run dev` を実行（動いていれば不要）→ ターミナルの `Local:` の行に表示された `http://localhost:3000` をPCのブラウザで開く（開いていれば再読み込み）。
+* **`Network:` の行に表示されるIPアドレスのURL（`http://（数字）:3000`）は使わない。** Next.jsの開発サーバーは、安全のため `localhost` 以外のアドレスで開くと画面の一部が動かなくなり、ボタンを押しても反応しないことがある。必ず `localhost` のURLで開く。
 * **`.env.local` を作ったり書き換えたりしたときは、必ず `Ctrl + C` で止めてから、もう一度 `npm run dev` を実行する**（環境変数は起動したときにしか読み込まれないため）。
 
 **共通手順P（GitHubへ送ってVercelで公開）**
@@ -65,6 +66,7 @@
 | code(404) でモデルが見つからない | `route.ts` のモデル名を【答え】と見比べる。合っていれば教員を呼ぶ（ルール8） |
 | code(429) | 無料枠の利用回数の上限。1分ほど待ってから送信する |
 | code(500)・code(503) | Gemini側の一時的な不調。少し待ってから送信する |
+| ボタンを押しても何も起きない（「読み込み中...」も出ない） | ブラウザのアドレスが `http://localhost:3000` になっているか確認。IPアドレス（`Network:` のURL）で開いていたら、`localhost` のURLで開き直す |
 | 「サーバーとの通信に失敗しました」と出る | `npm run dev` が動いているか、VS Codeのターミナルに赤いエラーが出ていないか確認 |
 | `useState` について「Client Component」などのエラーが出る | `app/page.tsx` の1行目が `"use client";` になっているか確認 |
 | 入力した文字が見えない | `app/globals.css` のダークモードの部分がコメントになっているか確認（ステップ5） |
@@ -284,7 +286,7 @@ export async function POST(request: Request) {
         // モデル一覧
         // https://aistudio.google.com/docs/models
         const response = await ai.models.generateContent({
-            model: 'gemini-3.6-flash',
+            model: 'gemini-3.1-flash-lite',
             contents: prompt,
         });
 
@@ -342,7 +344,7 @@ export async function POST(request: Request) {
         // モデル一覧
         // https://aistudio.google.com/docs/models
         const response = await ai.models.generateContent({
-            model: 'gemini-3.6-flash',
+            model: 'gemini-3.1-flash-lite',
             contents: prompt,
         });
 
